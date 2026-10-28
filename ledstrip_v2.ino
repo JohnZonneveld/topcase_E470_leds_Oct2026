@@ -190,7 +190,7 @@ void startupAnim() {
     setMatrixPixel(3, 2, CRGB(runB, 0, 0));
     setMatrixPixel(14, 2, CRGB(runB, 0, 0));
     setMatrixPixel(1, 1, CRGB(runB, 0, 0));
-    setMatrixPixel(16, 1, CRGB(255, 0, 0));
+    setMatrixPixel(16, 1, CRGB(runB, 0, 0));
     setMatrixPixel(0, 0, CRGB(255, 0, 0));
     setMatrixPixel(17, 0, CRGB(255, 0, 0));
   }
@@ -372,34 +372,18 @@ void loop() {
     isHazard = true;
   }
 
-  bool leftSideShouldBrake  = brake.state;
-  bool rightSideShouldBrake = brake.state;
-
-  if (isHazard) {
-    leftSideShouldBrake  = false;
-    rightSideShouldBrake = false;
-  } else {
-    if (leftLatch)  leftSideShouldBrake  = false; 
-    if (rightLatch) rightSideShouldBrake = false; 
-  }
-
   clearAll(); 
 
-  // LEFT SIDE TAILLIGHT
-  if (isHazard || leftLatch) {
-    if (leftSideShouldBrake) {
-      fill_solid(l9, LEN9, CRGB(255, 0, 0));
-      fill_solid(l8, LEN8, CRGB(255, 0, 0));
-      fill_solid(l6, LEN6, CRGB(255, 0, 0));
-    }
-    comet(l9, LEN9, leftStep);
-    comet(l8, LEN8, leftStep);
-    comet(l6, LEN6, leftStep);
-  } 
-  else if (leftSideShouldBrake) {
+  // LEFT SIDE TAILLIGHT (Brake has absolute priority)
+  if (brake.state) {
     fill_solid(l9, LEN9, CRGB(255, 0, 0));
     fill_solid(l8, LEN8, CRGB(255, 0, 0));
     fill_solid(l6, LEN6, CRGB(255, 0, 0));
+  } 
+  else if (isHazard || leftLatch) {
+    comet(l9, LEN9, leftStep);
+    comet(l8, LEN8, leftStep);
+    comet(l6, LEN6, leftStep);
   } 
   else {
     for(int i = 0; i < 4; i++) l9[i] = CRGB(60, 0, 0); 
@@ -407,21 +391,16 @@ void loop() {
     l6[0] = CRGB(60, 0, 0); 
   }
 
-  // RIGHT SIDE TAILLIGHT
-  if (isHazard || rightLatch) {
-    if (rightSideShouldBrake) {
-      fill_solid(r9, LEN9, CRGB(255, 0, 0));
-      fill_solid(r8, LEN8, CRGB(255, 0, 0));
-      fill_solid(r6, LEN6, CRGB(255, 0, 0));
-    }
-    comet(r9, LEN9, rightStep);
-    comet(r8, LEN8, rightStep);
-    comet(r6, LEN6, rightStep);
-  } 
-  else if (rightSideShouldBrake) {
+  // RIGHT SIDE TAILLIGHT (Brake has absolute priority)
+  if (brake.state) {
     fill_solid(r9, LEN9, CRGB(255, 0, 0));
     fill_solid(r8, LEN8, CRGB(255, 0, 0));
     fill_solid(r6, LEN6, CRGB(255, 0, 0));
+  } 
+  else if (isHazard || rightLatch) {
+    comet(r9, LEN9, rightStep);
+    comet(r8, LEN8, rightStep);
+    comet(r6, LEN6, rightStep);
   } 
   else {
     for(int i = 0; i < 4; i++) r9[i] = CRGB(60, 0, 0); 
