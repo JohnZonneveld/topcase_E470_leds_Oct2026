@@ -1,4 +1,4 @@
-# topcase_E470_leds_v2
+# topcase_E470_leds_Oct2026
 Made again some changes. Removed the FAT NINJA (compressed 4x3) scrolling animation as startup sequence with an additional double flash at the end. In stead it has been changed to an arrow animation making use of the matrix I created for the animated text.
 Removed some obsolete code and added some additional comments to clarify what is happening.
 As I am receiving a pulsing input from the turn signal lights and not the state of the turn signal switch I am using a hold routine to keep the turn status active so in between flashes it doesn't return to the running lights (rest condition). As also the turnsignal can be inconsistent I am actually measuring the on/off time to adjust the hold timer when needed so the turn signal is synced to the bike's flash pattern.
